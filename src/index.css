@@ -1,0 +1,17 @@
+/*
+Customize mini.css variables
+https://minicss.org/docs
+*/
+
+:root {
+  --fore-color: #541600;
+  --a-link-color: #cc4700;
+  --a-visited-color: #9e0142;
+  --header-fore-color: #cc4700;
+  --header-back-color: white;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
