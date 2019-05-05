@@ -1,14 +1,11 @@
 import React from "react";
 import Layout from "../../components/templates/Layout";
 import StatusCard from "../../components/molecules/StatusCard";
-import FetchStatus from "../../stateful/FetchStatus";
+import useFetchStatus from "../../hooks/useFetchEndpointStatus";
 
 const Card = ({ url, title }) => {
-  return (
-    <FetchStatus url={url}>
-      {props => <StatusCard url={url} title={title} {...props} />}
-    </FetchStatus>
-  );
+  const result = useFetchStatus(url);
+  return <StatusCard url={url} title={title} {...result} />;
 };
 
 const StatusPage = props => {

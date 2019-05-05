@@ -15,7 +15,7 @@ const Card = ({ title, url, status, responseTime, isLoading, reload }) => {
       <div className="section dark">{title}</div>
       <div className="section">
         <a href={url} target="_blank">
-          <span class="icon-link" /> Open
+          <span className="icon-link" /> Open
         </a>
       </div>
       {isLoading ? (
@@ -28,7 +28,7 @@ const Card = ({ title, url, status, responseTime, isLoading, reload }) => {
             <mark className="tertiary">OK</mark> TIME {responseTime} ms
           </div>
           <div className="section">
-            <button class="small" onClick={reload}>
+            <button className="small" onClick={reload}>
               REFRESH
             </button>
           </div>

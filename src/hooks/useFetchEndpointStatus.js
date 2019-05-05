@@ -1,9 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Async from "react-async";
+import { useFetch } from "react-async";
+
+export default function useFetchEndpointStatus(url) {
+  const headers = { Accept: "application/json" };
+  const {startedAt, finishedAt, ...result} = useFetch(url, { headers });
+  const responseTime = finishedAt - startedAt;
+  return {...result, responseTime}
+}
 
 /*
-  <Async> child function is called passing the following parameters:
+  Data returned by `react-async`
   data {any} last resolved promise value, maintained when new error arrives
   error {Error} rejected promise reason, cleared when new data arrives
   isLoading {boolean} true while a promise is pending
@@ -16,22 +21,3 @@ import Async from "react-async";
   setError {Function} sets error to the passed value and cancels any pending promise
 
 */
-
-const FetchStatus = ({ url, children }) => {
-  const loadJson = () => fetch(url).then(res => res.json());
-  return (
-    <Async promiseFn={loadJson}>
-      {({ data, error, isLoading, reload, startedAt, finishedAt }) => {
-        const responseTime = finishedAt - startedAt;
-        return children({ data, error, isLoading, responseTime, reload });
-      }}
-    </Async>
-  );
-};
-
-FetchStatus.propTypes = {
-  url: PropTypes.string.isRequired,
-  children: PropTypes.func.isRequired
-};
-
-export default FetchStatus;
