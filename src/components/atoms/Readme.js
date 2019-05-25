@@ -10,7 +10,12 @@ const Readme = ({ html, isLoading }) => {
   return (
     <div style={{ width: "100%" }}>
       <Label2>README.md</Label2>
-      {html && <div dangerouslySetInnerHTML={{ __html: html }} />}
+      {html && (
+        <div
+          className="markdown-body"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      )}
     </div>
   );
 };
