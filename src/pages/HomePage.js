@@ -4,14 +4,13 @@ import { StyledLink } from "baseui/link";
 
 import Layout from "../components/templates/Layout";
 import ProjectTable from "../components/molecules/ProjectTable";
+import { ProjectListContext, sortBy } from "../providers/project-list-provider";
 import {
-  ProjectListContext,
-  sortBy,
-  starsAddedYesterday,
-  starsAddedThisWeek,
-  starsAddedThisMonth,
-  starsAddedThisYear
-} from "../providers/project-list-provider";
+  getStarsAddedYesterday,
+  getStarsAddedThisWeek,
+  getStarsAddedThisMonth,
+  getStarsAddedThisYear
+} from "../providers/project-selectors";
 import { PageTitle, SectionTitle } from "../components/atoms/typography";
 
 const HomePage = props => {
@@ -31,57 +30,59 @@ const HomePage = props => {
 
       <H4>Last 7 days</H4>
       <ProjectTable
-        projects={sortBy(starsAddedThisWeek, -1)(projects).slice(0, 5)}
+        projects={sortBy(getStarsAddedThisWeek, -1)(projects).slice(0, 5)}
       />
 
       <H4>Last 30 days</H4>
       <ProjectTable
-        projects={sortBy(starsAddedThisMonth, -1)(projects).slice(0, 10)}
+        projects={sortBy(getStarsAddedThisMonth, -1)(projects).slice(0, 10)}
       />
 
       <H4>Last 12 months</H4>
       <ProjectTable
-        projects={sortBy(starsAddedThisYear, -1)(projects).slice(0, 10)}
+        projects={sortBy(getStarsAddedThisYear, -1)(projects).slice(0, 10)}
       />
 
       <H3>Cold</H3>
 
       <H4>Cold yesterday</H4>
       <ProjectTable
-        projects={sortBy(starsAddedYesterday, 1)(projects).slice(0, 10)}
+        projects={sortBy(getStarsAddedYesterday, 1)(projects).slice(0, 10)}
       />
 
       <H4>Cold this week</H4>
       <ProjectTable
-        projects={sortBy(starsAddedThisWeek, 1)(projects).slice(0, 10)}
+        projects={sortBy(getStarsAddedThisWeek, 1)(projects).slice(0, 10)}
       />
 
       <H4>Cold this month</H4>
       <Paragraph1>
-        {projects.filter(project => starsAddedThisMonth(project) < 0).length}{" "}
+        {projects.filter(project => getStarsAddedThisMonth(project) < 0).length}{" "}
         projects lost stars over the last 30 days.
         <br />
         {
-          projects.filter(project => starsAddedThisMonth(project) === 0).length
+          projects.filter(project => getStarsAddedThisMonth(project) === 0)
+            .length
         }{" "}
         projects have the same number of stars.
       </Paragraph1>
       <ProjectTable
-        projects={sortBy(starsAddedThisMonth, 1)(projects).slice(0, 10)}
+        projects={sortBy(getStarsAddedThisMonth, 1)(projects).slice(0, 10)}
       />
 
       <H4>Cold this year</H4>
       <Paragraph1>
-        {projects.filter(project => starsAddedThisYear(project) < 0).length}{" "}
+        {projects.filter(project => getStarsAddedThisYear(project) < 0).length}{" "}
         projects lost stars over the last 12 weeks.
         <br />
         {
-          projects.filter(project => starsAddedThisYear(project) === 0).length
+          projects.filter(project => getStarsAddedThisYear(project) === 0)
+            .length
         }{" "}
         projects have the same number of stars.
       </Paragraph1>
       <ProjectTable
-        projects={sortBy(starsAddedThisYear, 1)(projects).slice(0, 20)}
+        projects={sortBy(getStarsAddedThisYear, 1)(projects).slice(0, 20)}
       />
     </Layout>
   );

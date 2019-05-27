@@ -16,27 +16,6 @@ export const sortBy = (fn, direction = 1) => items => {
   return clonedItems;
 };
 
-export const stars = project => project.stars;
-
-export const starsAddedYesterday = ({ deltas }) => deltas[0];
-
-export const starsAddedThisWeek = ({ deltas }) =>
-  deltas.reduce((acc, val) => acc + val, 0);
-
-export const starsAddedThisMonth = ({ monthly }) => {
-  const lastIndex = monthly.length - 1;
-  if (lastIndex < 2) return undefined;
-  return monthly[lastIndex] - monthly[lastIndex - 1];
-};
-
-export const starsAddedThisYear = ({ monthly }) => {
-  if (monthly.length < 7) return undefined;
-  return monthly[6] - monthly[0];
-};
-
-export const sortByStars = sortBy(item => item.stars);
-export const sortWeeklyTrend = sortBy(starsAddedThisWeek);
-
 export const ProjectListProvider = ({ children }) => {
   const [{ projects, tags }, setData] = useState({ projects: [], tags: [] });
   useEffect(() => {

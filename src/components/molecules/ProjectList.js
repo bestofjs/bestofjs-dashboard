@@ -9,10 +9,11 @@ import StarDelta from "../atoms/StarDelta";
 import { ProjectAvatar } from "../atoms/ProjectAvatar";
 import fromNow from "../../utils/fromNow";
 import {
-  starsAddedThisWeek,
-  starsAddedThisMonth,
-  starsAddedThisYear
-} from "../../providers/project-list-provider";
+  getStarsAddedThisWeek,
+  getStarsAddedThisMonth,
+  getStarsAddedThisYear,
+  getStarsAddedYesterday
+} from "../../providers/project-selectors";
 
 const TableRow = styled("div", {
   display: "flex",
@@ -40,11 +41,13 @@ const Row = ({ index, style, data, onSelectTag, onSelectProject }) => {
         <Cell style={{ width: 120, textAlign: "right" }}>
           <StarIcon /> {stars}
           <br />
-          <StarDelta delta={starsAddedThisWeek(project)} />
+          <StarDelta delta={getStarsAddedYesterday(project)} />
           <br />
-          <StarDelta delta={starsAddedThisMonth(project)} />
+          <StarDelta delta={getStarsAddedThisWeek(project)} />
           <br />
-          <StarDelta delta={starsAddedThisYear(project)} />
+          <StarDelta delta={getStarsAddedThisMonth(project)} />
+          <br />
+          <StarDelta delta={getStarsAddedThisYear(project)} />
         </Cell>
         <Cell>
           {fromNow(pushed_at)}

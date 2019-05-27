@@ -1,7 +1,7 @@
 import React from "react";
 import { styled } from "baseui";
 import { Block } from "baseui/block";
-import { H3 } from "baseui/typography";
+// import { H3 } from "baseui/typography";
 
 import Layout from "../components/templates/Layout";
 import StatusCard from "../components/molecules/StatusCard";

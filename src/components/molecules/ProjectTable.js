@@ -6,24 +6,19 @@ import StarDelta from "../atoms/StarDelta";
 import { ProjectAvatar } from "../atoms/ProjectAvatar";
 import fromNow from "../../utils/fromNow";
 import {
-  starsAddedYesterday,
-  starsAddedThisWeek,
-  starsAddedThisMonth,
-  starsAddedThisYear
-} from "../../providers/project-list-provider";
+  getStarsAddedYesterday,
+  getStarsAddedThisWeek,
+  getStarsAddedThisMonth,
+  getStarsAddedThisYear,
+  getLastCommitDate
+} from "../../providers/project-selectors";
 
 const ProjectTable = ({ projects }) => {
   return (
     <StyledTable>
       <StyledBody>
         {projects.map(project => {
-          const {
-            name,
-            stars,
-            pushed_at,
-            contributor_count,
-            description
-          } = project;
+          const { name, stars, contributor_count, description } = project;
           return (
             <StyledRow key={name}>
               <StyledCell>
@@ -34,18 +29,18 @@ const ProjectTable = ({ projects }) => {
                 <StarCount value={stars} />
               </StyledCell>
               <StyledCell>
-                <StarDelta delta={starsAddedYesterday(project)} />
+                <StarDelta delta={getStarsAddedYesterday(project)} />
               </StyledCell>
               <StyledCell>
-                <StarDelta delta={starsAddedThisWeek(project)} />
+                <StarDelta delta={getStarsAddedThisWeek(project)} />
               </StyledCell>
               <StyledCell>
-                <StarDelta delta={starsAddedThisMonth(project)} />
+                <StarDelta delta={getStarsAddedThisMonth(project)} />
               </StyledCell>
               <StyledCell>
-                <StarDelta delta={starsAddedThisYear(project)} />
+                <StarDelta delta={getStarsAddedThisYear(project)} />
               </StyledCell>
-              <StyledCell>{fromNow(pushed_at)}</StyledCell>
+              <StyledCell>{fromNow(getLastCommitDate(project))}</StyledCell>
               <StyledCell>{contributor_count}</StyledCell>
               <StyledCell>{description.slice(0, 50)}</StyledCell>
             </StyledRow>

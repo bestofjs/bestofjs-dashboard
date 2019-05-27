@@ -5,11 +5,11 @@ import { FormControl } from "baseui/form-control";
 import { Checkbox } from "baseui/checkbox";
 import { Input, SIZE } from "baseui/input";
 import { styled } from "baseui";
-// import { Radio, SRadioGroup } from "baseui/radio";
-// import { Block } from "baseui/block";
 
 import ProjectList from "../molecules/ProjectList";
 import ProjectDetails from "../molecules/ProjectDetails";
+import { SortOrderPicker, sortOrderOptions } from "../atoms/search-options";
+import { sortBy } from "../../providers/project-list-provider";
 
 const Grid = styled("div", {
   display: "flex",
@@ -28,6 +28,7 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
   const [selectedProject, setSelectedProject] = useState();
   const [checked, setChecked] = useState(false);
   const [query, setQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState(sortOrderOptions[0]);
 
   const options = allTags.map(({ name, code }) => ({ id: code, label: name }));
   const getTagById = id => {
@@ -37,6 +38,10 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
 
   const filteredProjects = filterProjects(projects, { tags, checked, query });
   const isFiltered = tags.length > 0 || checked || query;
+
+  const sortedProjects = sortBy(sortOrder.selector, sortOrder.direction)(
+    filteredProjects
+  );
 
   return (
     <Grid>
@@ -79,8 +84,9 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
               ? `${filteredProjects.length} projects found`
               : `All projects (${projects.length})`}
           </Label2>
+          <SortOrderPicker onChange={setSortOrder} value={sortOrder} />
           <ProjectList
-            projects={filteredProjects}
+            projects={sortedProjects}
             onSelectProject={project => setSelectedProject(project)}
             onSelectTag={id => setTags([getTagById(id)])}
           />

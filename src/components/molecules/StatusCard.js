@@ -27,7 +27,7 @@ const StatusCard = ({
   const isStatusOK = status === "fulfilled";
   if (status === "rejected") console.log(error);
   const isTestOK = !isLoading && testAssertions(assertions, data);
-  console.log({ isTestOK });
+
   return (
     <Card title={title}>
       <StyledBody className="section">
