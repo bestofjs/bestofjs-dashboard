@@ -12,11 +12,17 @@ import { SortOrderPicker, sortOrderOptions } from "../atoms/search-options";
 import { sortBy } from "../../providers/project-list-provider";
 
 const Grid = styled("div", {
-  display: "flex",
-  margin: "-2rem 0 0 -2rem",
-  width: "100%"
+  display: "flex"
+  // margin: "-2rem 0 0 -2rem",
+  // width: "100%"
 });
-const Column = styled("div", { flex: 1, padding: "2rem 0 0 2rem" });
+
+const Column = styled("div", props => ({
+  // flex: "0 0 50%",
+  width: "50%",
+  paddingRight: props.first ? "1rem" : 0,
+  paddingLeft: props.second ? "1rem" : 0
+}));
 
 const Section = styled("section", {
   backgroundColor: "white",
@@ -45,7 +51,7 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
 
   return (
     <Grid>
-      <Column>
+      <Column first>
         <Section
           style={{
             marginBottom: "2rem"
@@ -92,7 +98,7 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
           />
         </Section>
       </Column>
-      <Column>
+      <Column second>
         <Section>
           {selectedProject ? (
             <ProjectDetails project={selectedProject} />

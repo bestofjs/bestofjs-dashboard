@@ -17,16 +17,20 @@ export const sortBy = (fn, direction = 1) => items => {
 };
 
 export const ProjectListProvider = ({ children }) => {
-  const [{ projects, tags }, setData] = useState({ projects: [], tags: [] });
+  const [{ projects, tags, isLoading }, setData] = useState({
+    projects: [],
+    tags: [],
+    isLoading: true
+  });
   useEffect(() => {
     const loadProjects = async () => {
       const url = "https://bestofjs-api-v2.firebaseapp.com/projects.json";
       const { projects, tags } = await loadJson(url);
-      setData({ projects, tags });
+      setData({ projects, tags, isLoading: false });
     };
     loadProjects();
   }, []);
-  return <Provider value={{ projects, tags }}>{children}</Provider>;
+  return <Provider value={{ projects, tags, isLoading }}>{children}</Provider>;
 };
 
 export const ProjectListConsumer = Consumer;

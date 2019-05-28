@@ -12,9 +12,9 @@ import {
   getStarsAddedThisYear
 } from "../providers/project-selectors";
 import { PageTitle, SectionTitle } from "../components/atoms/typography";
+import { Spinner } from "baseui/spinner";
 
 const HomePage = props => {
-  const { projects /* tags */ } = useContext(ProjectListContext);
   return (
     <Layout>
       <PageTitle>Best of JavaScript Dashboard</PageTitle>
@@ -22,7 +22,16 @@ const HomePage = props => {
         A dashboard to control all the things related to{" "}
         <StyledLink href="https://bestofjs.org">Best of JavaScript</StyledLink>.
       </Paragraph2>
+      <HomePageSections />
+    </Layout>
+  );
+};
 
+const HomePageSections = () => {
+  const { projects, isLoading /* tags */ } = useContext(ProjectListContext);
+  if (isLoading) return <Spinner />;
+  return (
+    <>
       <SectionTitle>Last projects added</SectionTitle>
       <ProjectTable projects={projects.slice(projects.length - 10).reverse()} />
 
@@ -84,7 +93,7 @@ const HomePage = props => {
       <ProjectTable
         projects={sortBy(getStarsAddedThisYear, 1)(projects).slice(0, 20)}
       />
-    </Layout>
+    </>
   );
 };
 
