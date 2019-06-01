@@ -4,21 +4,21 @@ import { Label2 } from "baseui/typography";
 import { FormControl } from "baseui/form-control";
 import { Checkbox } from "baseui/checkbox";
 import { Input, SIZE } from "baseui/input";
+import { Block } from "baseui/block";
+import { Delete as DeleteIcon } from "baseui/icon";
 import { styled } from "baseui";
 
 import ProjectList from "../molecules/ProjectList";
 import ProjectDetails from "../molecules/ProjectDetails";
 import { SortOrderPicker, sortOrderOptions } from "../atoms/search-options";
 import { sortBy } from "../../providers/project-list-provider";
+import search from "../../utils/search";
 
 const Grid = styled("div", {
   display: "flex"
-  // margin: "-2rem 0 0 -2rem",
-  // width: "100%"
 });
 
 const Column = styled("div", props => ({
-  // flex: "0 0 50%",
   width: "50%",
   paddingRight: props.first ? "1rem" : 0,
   paddingLeft: props.second ? "1rem" : 0
@@ -32,7 +32,7 @@ const Section = styled("section", {
 const ProjectDashboard = ({ projects, tags: allTags }) => {
   const [tags, setTags] = useState([]);
   const [selectedProject, setSelectedProject] = useState();
-  const [checked, setChecked] = useState(false);
+  const [hasIcon, setHasIcon] = useState(false);
   const [query, setQuery] = useState("");
   const [sortOrder, setSortOrder] = useState(sortOrderOptions[0]);
 
@@ -42,8 +42,8 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
     return found;
   };
 
-  const filteredProjects = filterProjects(projects, { tags, checked, query });
-  const isFiltered = tags.length > 0 || checked || query;
+  const filteredProjects = findProjects(projects, { tags, hasIcon, query });
+  const isFiltered = tags.length > 0 || hasIcon || query;
 
   const sortedProjects = sortBy(sortOrder.selector, sortOrder.direction)(
     filteredProjects
@@ -63,6 +63,21 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
               value={query}
               onChange={e => setQuery(e.target.value)}
               placeholder="Enter a keyword"
+              overrides={{
+                After: () => (
+                  <Block
+                    display="flex"
+                    alignItems="center"
+                    paddingRight="scale500"
+                  >
+                    <DeleteIcon
+                      size="16px"
+                      onClick={() => setQuery("")}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </Block>
+                )
+              }}
             />
           </FormControl>
           <FormControl label="Tags">
@@ -79,7 +94,7 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
             />
           </FormControl>
 
-          <Checkbox checked={checked} onChange={() => setChecked(!checked)}>
+          <Checkbox checked={hasIcon} onChange={() => setHasIcon(!hasIcon)}>
             Show Only Featured projects
           </Checkbox>
         </Section>
@@ -126,33 +141,29 @@ const EmptySpace = () => (
   </div>
 );
 
-function filterProjects(projects, { tags, checked, query }) {
+function findProjects(projects, { tags, hasIcon, query }) {
   const tagIds = tags.map(tag => tag.id);
-  // const filterByTag = project => project.tags.some(tag => tagIds.includes(tag));
+
   const filterByTag = project =>
     tagIds.every(tagId => project.tags.includes(tagId));
 
-  const filterByQuery = project => {
-    const re1 = new RegExp("^" + query, "i");
-    const re2 = new RegExp(query, "i");
-    if (re1.test(project.name)) return true;
-    if (re2.test(project.description)) {
-      return true;
-    }
-  };
-
-  return projects.filter(project => {
+  const filteredProjects = projects.filter(project => {
     if (tags.length > 0) {
       if (!filterByTag(project)) return false;
     }
-    if (checked) {
+
+    if (hasIcon) {
       if (!project.icon) return false;
     }
-    if (query) {
-      if (!filterByQuery(project)) return false;
-    }
+
     return true;
   });
+
+  const foundProjects = query
+    ? search(filteredProjects, query)
+    : filteredProjects;
+
+  return foundProjects;
 }
 
 export default ProjectDashboard;
