@@ -28,7 +28,7 @@ const StatusPage = props => {
       <SectionTitle>Best of JavaScript APIs</SectionTitle>
       <Grid>
         <Card
-          url="https://bestofjs-api-v2.firebaseapp.com/projects.json"
+          url="https://bestofjs-api-v3.firebaseapp.com/projects.json"
           title="Project Full List"
           assertions={[({ projects }) => projects.length > 1000]}
           preview={({ projects }) =>
@@ -39,7 +39,7 @@ const StatusPage = props => {
           }
         />
         <Card
-          url="https://bestofjs-api-v2.firebaseapp.com/hof.json"
+          url="https://bestofjs-api-v3.firebaseapp.com/hof.json"
           title="Hall of Fame"
           assertions={[({ heroes }) => heroes.length > 100]}
           preview={({ heroes }) =>

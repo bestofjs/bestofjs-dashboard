@@ -33,7 +33,7 @@ const HomePageSections = () => {
   return (
     <>
       <SectionTitle>Last projects added</SectionTitle>
-      <ProjectTable projects={projects.slice(projects.length - 10).reverse()} />
+      <ProjectTable projects={projects.slice(0, 20)} />
 
       <H3>Trending</H3>
 

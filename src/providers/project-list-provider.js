@@ -24,7 +24,7 @@ export const ProjectListProvider = ({ children }) => {
   });
   useEffect(() => {
     const loadProjects = async () => {
-      const url = "https://bestofjs-api-v2.firebaseapp.com/projects.json";
+      const url = "https://bestofjs-api-v3.firebaseapp.com/projects.json";
       const { projects, tags } = await loadJson(url);
       setData({ projects, tags, isLoading: false });
     };
