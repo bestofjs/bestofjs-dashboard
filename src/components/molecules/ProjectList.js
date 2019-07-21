@@ -6,13 +6,15 @@ import { StyledLink } from "baseui/link";
 
 import StarIcon from "../atoms/StarIcon";
 import StarDelta from "../atoms/StarDelta";
+import RelativeGrowthRate from "../atoms/RelativeGrowthRate";
 import { ProjectAvatar } from "../atoms/ProjectAvatar";
 import fromNow from "../../utils/fromNow";
 import {
   getStarsAddedThisWeek,
   getStarsAddedThisMonth,
   getStarsAddedThisYear,
-  getStarsAddedYesterday
+  getStarsAddedYesterday,
+  getRelativeGrowthRate
 } from "../../providers/project-selectors";
 
 const TableRow = styled("div", {
@@ -37,23 +39,33 @@ const Row = ({ index, style, data, onSelectTag, onSelectProject }) => {
         </Cell>
         <Cell style={{ width: 150, cursor: "pointer" }} onClick={handleClick}>
           <StyledLink>{name}</StyledLink>
-        </Cell>
-        <Cell style={{ width: 120, textAlign: "right" }}>
+          <br />
           <StarIcon /> {stars}
           <br />
-          <StarDelta delta={getStarsAddedYesterday(project)} />
-          <br />
-          <StarDelta delta={getStarsAddedThisWeek(project)} />
-          <br />
-          <StarDelta delta={getStarsAddedThisMonth(project)} />
-          <br />
-          <StarDelta delta={getStarsAddedThisYear(project)} />
-        </Cell>
-        <Cell>
           {fromNow(pushed_at)}
           <br />
           {contributor_count} contributors
         </Cell>
+        <Cell style={{ width: 200 }}>
+          1d: <StarDelta delta={getStarsAddedYesterday(project)} />{" "}
+          <RelativeGrowthRate value={getRelativeGrowthRate("daily")(project)} />
+          <br />
+          1w <StarDelta delta={getStarsAddedThisWeek(project)} />{" "}
+          <RelativeGrowthRate
+            value={getRelativeGrowthRate("weekly")(project)}
+          />
+          <br />
+          1m <StarDelta delta={getStarsAddedThisMonth(project)} />{" "}
+          <RelativeGrowthRate
+            value={getRelativeGrowthRate("monthly")(project)}
+          />
+          <br />
+          1y <StarDelta delta={getStarsAddedThisYear(project)} />{" "}
+          <RelativeGrowthRate
+            value={getRelativeGrowthRate("yearly")(project)}
+          />
+        </Cell>
+        <Cell />
         <Cell>
           {tags.map(tag => (
             <Tag key={tag} closeable={false} onClick={() => onSelectTag(tag)}>

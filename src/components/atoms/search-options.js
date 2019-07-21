@@ -7,7 +7,8 @@ import {
   getStarsAddedYesterday,
   getStarsAddedThisWeek,
   getStarsAddedThisMonth,
-  getLastCommitDate
+  getLastCommitDate,
+  getRelativeGrowthRate
 } from "../../providers/project-selectors";
 
 export const sortOrderOptions = [
@@ -58,6 +59,24 @@ export const sortOrderOptions = [
     label: "Last commit date",
     selector: getLastCommitDate,
     direction: 1
+  },
+  {
+    id: "weekly-growth",
+    label: "Weekly relative growth",
+    selector: getRelativeGrowthRate("weekly"),
+    direction: -1
+  },
+  {
+    id: "monthly-growth",
+    label: "Monthly relative growth",
+    selector: getRelativeGrowthRate("monthly"),
+    direction: -1
+  },
+  {
+    id: "yearly-growth",
+    label: "Yearly relative growth",
+    selector: getRelativeGrowthRate("yearly"),
+    direction: -1
   }
 ];
 
