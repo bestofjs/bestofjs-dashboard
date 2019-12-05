@@ -50,8 +50,8 @@ const StatusPage = props => {
           }
         />
         <Card
-          url="https://bestofjs-api-v2.now.sh/projects/reduxjs/redux"
-          title="Project Details v2"
+          url="https://bestofjs-api-v3.now.sh/projects/reduxjs/redux"
+          title="Project Details v3"
           assertions={[({ name }) => name === "Redux"]}
           preview={({ name, description }) => `${name} ${description}`}
         />
