@@ -1,15 +1,22 @@
 import { useAsync } from "react-async";
 
+export const config = {
+  fetchReadMe: ({ fullName, branch = "master" }) =>
+    `https://bestofjs-serverless.now.sh/api/project-readme?fullName=${fullName}&branch=${branch}`,
+  fetchProjectDetails: ({ fullName }) =>
+    `https://bestofjs-serverless.now.sh/api/project-details?fullName=${fullName}`,
+};
+
 export function fetchJSON({ url }, options) {
   return fetch(url, options)
     .then(checkStatus)
-    .then(r => r.json());
+    .then((r) => r.json());
 }
 
 function fetchHTML({ url }, options) {
   return fetch(url, options)
     .then(checkStatus)
-    .then(r => r.text());
+    .then((r) => r.text());
 }
 
 function checkStatus(response) {
@@ -32,7 +39,7 @@ export function useFetchEndpointStatus(url, responseType = "json") {
 }
 
 export function useFetchProjectReadMe(fullName, branch = "master") {
-  const url = `https://get-github-readme-v2.now.sh/${fullName}?branch=${branch}`;
+  const url = config.fetchReadMe({ fullName, branch });
   return useAsync({ promiseFn: fetchHTML, watch: fullName, url });
 }
 

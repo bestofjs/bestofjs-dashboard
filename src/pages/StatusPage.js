@@ -5,12 +5,12 @@ import { Block } from "baseui/block";
 
 import Layout from "../components/templates/Layout";
 import StatusCard from "../components/molecules/StatusCard";
-import { useFetchEndpointStatus } from "../hooks/fetch-hooks";
+import { useFetchEndpointStatus, config } from "../hooks/fetch-hooks";
 import { PageTitle, SectionTitle } from "../components/atoms/typography";
 
 const Grid = styled("div", { display: "flex", margin: "-1rem 0 0 -1rem" });
 
-const Card = props => {
+const Card = (props) => {
   const { url, responseType } = props;
   const result = useFetchEndpointStatus(url, responseType);
   return (
@@ -20,7 +20,7 @@ const Card = props => {
   );
 };
 
-const StatusPage = props => {
+const StatusPage = (props) => {
   return (
     <Layout>
       <PageTitle>API Status</PageTitle>
@@ -28,56 +28,57 @@ const StatusPage = props => {
       <SectionTitle>Best of JavaScript APIs</SectionTitle>
       <Grid>
         <Card
-          url="https://bestofjs-api-v3.firebaseapp.com/projects.json"
+          url="https://bestofjs-static-api.now.sh/projects.json"
           title="Project Full List"
           assertions={[({ projects }) => projects.length > 1000]}
           preview={({ projects }) =>
             projects
               .slice(0, 5)
-              .map(project => project.name)
+              .map((project) => project.name)
               .join(", ")
           }
         />
         <Card
-          url="https://bestofjs-api-v3.firebaseapp.com/hof.json"
+          url="https://bestofjs-static-api.now.sh/hof.json"
           title="Hall of Fame"
           assertions={[({ heroes }) => heroes.length > 100]}
           preview={({ heroes }) =>
             heroes
               .slice(0, 5)
-              .map(hero => hero.username)
+              .map((hero) => hero.username)
               .join(", ")
           }
         />
         <Card
-          url="https://bestofjs-api-v3.now.sh/projects/reduxjs/redux"
-          title="Project Details v3"
+          url={config.fetchProjectDetails({ fullName: "reduxjs/redux" })}
+          title="Project Details"
           assertions={[({ name }) => name === "Redux"]}
           preview={({ name, description }) => `${name} ${description}`}
         />
         <Card
           responseType="html"
-          url="https://get-github-readme-v2.now.sh/reduxjs/redux?branch=master"
+          url={config.fetchReadMe({ fullName: "reduxjs/redux" })}
           title="Project README.md"
           assertions={[
-            html => {
+            (html) => {
               return html.length > 1000;
+            },
+          ]}
+          preview={(html) => html.slice(0, 50)}
+        />
+        {false && (
+          <Card
+            url="https://fetch-license.now.sh/package?name=redux"
+            title="Project License"
+            assertions={[
+              ({ status, meta: { name } }) =>
+                status === "OK" && name === "redux",
+            ]}
+            preview={({ licenses }) =>
+              Object.keys(licenses).slice(0, 5).join(", ")
             }
-          ]}
-          preview={html => html.slice(0, 50)}
-        />
-        <Card
-          url="https://fetch-license.now.sh/package?name=redux"
-          title="Project License"
-          assertions={[
-            ({ status, meta: { name } }) => status === "OK" && name === "redux"
-          ]}
-          preview={({ licenses }) =>
-            Object.keys(licenses)
-              .slice(0, 5)
-              .join(", ")
-          }
-        />
+          />
+        )}
       </Grid>
       <SectionTitle>External APIs</SectionTitle>
       <Grid>
