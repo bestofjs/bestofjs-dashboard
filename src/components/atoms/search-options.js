@@ -7,6 +7,7 @@ import {
   getStarsAddedYesterday,
   getStarsAddedThisWeek,
   getStarsAddedThisMonth,
+  getStarsAddedThisYear,
   getLastCommitDate,
   getRelativeGrowthRate
 } from "../../providers/project-selectors";
@@ -52,6 +53,18 @@ export const sortOrderOptions = [
     id: "cold-this-month",
     label: "Stars lost this month",
     selector: getStarsAddedThisMonth,
+    direction: 1
+  },
+  {
+    id: "hot-this-year",
+    label: "Stars added this year",
+    selector: getStarsAddedThisYear,
+    direction: -1
+  },
+  {
+    id: "cold-this-year",
+    label: "Stars lost this year",
+    selector: getStarsAddedThisYear,
     direction: 1
   },
   {

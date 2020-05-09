@@ -12,6 +12,7 @@ import ProjectList from "../molecules/ProjectList";
 import ProjectDetails from "../molecules/ProjectDetails";
 import { SortOrderPicker, sortOrderOptions } from "../atoms/search-options";
 import { sortBy } from "../../providers/project-list-provider";
+import { isInactiveProject } from "../../providers/project-selectors";
 import search from "../../utils/search";
 
 const Grid = styled("div", {
@@ -33,6 +34,7 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
   const [tags, setTags] = useState([]);
   const [selectedProject, setSelectedProject] = useState();
   const [hasIcon, setHasIcon] = useState(false);
+  const [isInactive, setIsInactive] = useState(false);
   const [query, setQuery] = useState("");
   const [sortOrder, setSortOrder] = useState(sortOrderOptions[0]);
 
@@ -42,8 +44,13 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
     return found;
   };
 
-  const filteredProjects = findProjects(projects, { tags, hasIcon, query });
-  const isFiltered = tags.length > 0 || hasIcon || query;
+  const filteredProjects = findProjects(projects, {
+    tags,
+    hasIcon,
+    isInactive,
+    query
+  });
+  const isFiltered = tags.length > 0 || hasIcon || isInactive || query;
 
   const sortedProjects = sortBy(sortOrder.selector, sortOrder.direction)(
     filteredProjects
@@ -95,7 +102,13 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
           </FormControl>
 
           <Checkbox checked={hasIcon} onChange={() => setHasIcon(!hasIcon)}>
-            Show Only Featured projects
+            Featured projects
+          </Checkbox>
+          <Checkbox
+            checked={isInactive}
+            onChange={() => setIsInactive(!isInactive)}
+          >
+            Inactive projects
           </Checkbox>
         </Section>
 
@@ -141,7 +154,7 @@ const EmptySpace = () => (
   </div>
 );
 
-function findProjects(projects, { tags, hasIcon, query }) {
+function findProjects(projects, { tags, hasIcon, isInactive, query }) {
   const tagIds = tags.map(tag => tag.id);
 
   const filterByTag = project =>
@@ -154,6 +167,10 @@ function findProjects(projects, { tags, hasIcon, query }) {
 
     if (hasIcon) {
       if (!project.icon) return false;
+    }
+
+    if (isInactive) {
+      if (!isInactiveProject(project)) return false;
     }
 
     return true;

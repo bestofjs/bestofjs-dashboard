@@ -31,3 +31,15 @@ export const getRelativeGrowthRate = timeRangeKey => ({ stars, trends }) => {
   const delta = trends[timeRangeKey];
   return delta ? delta / (stars - delta) : undefined;
 };
+
+const getYearSinceLastCommit = project =>
+  (today - getLastCommitDate(project)) / 1000 / 3600 / 24 / 365;
+
+const today = new Date();
+
+export const isInactiveProject = project => {
+  return (
+    Math.floor(getYearSinceLastCommit(project)) > 0 &&
+    getStarsAddedThisYear(project) < 200
+  );
+};
