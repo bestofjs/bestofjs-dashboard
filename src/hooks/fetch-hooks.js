@@ -1,6 +1,8 @@
 import { useAsync } from "react-async";
 
 export const config = {
+  fetchProjectList: () => `https://bestofjs-static-api.now.sh/projects.json`,
+  fetchHallOfFame: () => `https://bestofjs-static-api.now.sh/hof.json`,
   fetchReadMe: ({ fullName, branch = "master" }) =>
     `https://bestofjs-serverless.now.sh/api/project-readme?fullName=${fullName}&branch=${branch}`,
   fetchProjectDetails: ({ fullName }) =>

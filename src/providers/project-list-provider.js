@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { config } from "../hooks/fetch-hooks";
 
 export const ProjectListContext = React.createContext();
 
@@ -24,7 +25,7 @@ export const ProjectListProvider = ({ children }) => {
   });
   useEffect(() => {
     const loadProjects = async () => {
-      const url = "https://bestofjs-static-api.now.sh/projects.json";
+      const url = config.fetchProjectList();
       const { projects, tags } = await loadJson(url);
       setData({ projects, tags, isLoading: false });
     };

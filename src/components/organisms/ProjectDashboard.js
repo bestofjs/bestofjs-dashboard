@@ -16,18 +16,18 @@ import { isInactiveProject } from "../../providers/project-selectors";
 import search from "../../utils/search";
 
 const Grid = styled("div", {
-  display: "flex"
+  display: "flex",
 });
 
-const Column = styled("div", props => ({
+const Column = styled("div", (props) => ({
   width: "50%",
   paddingRight: props.first ? "1rem" : 0,
-  paddingLeft: props.second ? "1rem" : 0
+  paddingLeft: props.second ? "1rem" : 0,
 }));
 
 const Section = styled("section", {
   backgroundColor: "white",
-  padding: "1rem"
+  padding: "1rem",
 });
 
 const ProjectDashboard = ({ projects, tags: allTags }) => {
@@ -39,8 +39,8 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
   const [sortOrder, setSortOrder] = useState(sortOrderOptions[0]);
 
   const options = allTags.map(({ name, code }) => ({ id: code, label: name }));
-  const getTagById = id => {
-    const found = options.find(tag => tag.id === id);
+  const getTagById = (id) => {
+    const found = options.find((tag) => tag.id === id);
     return found;
   };
 
@@ -48,27 +48,28 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
     tags,
     hasIcon,
     isInactive,
-    query
+    query,
   });
   const isFiltered = tags.length > 0 || hasIcon || isInactive || query;
 
-  const sortedProjects = sortBy(sortOrder.selector, sortOrder.direction)(
-    filteredProjects
-  );
+  const sortedProjects = sortBy(
+    sortOrder.selector,
+    sortOrder.direction
+  )(filteredProjects);
 
   return (
     <Grid>
       <Column first>
         <Section
           style={{
-            marginBottom: "2rem"
+            marginBottom: "2rem",
           }}
         >
           <FormControl label="Keyword">
             <Input
               size={SIZE.compact}
               value={query}
-              onChange={e => setQuery(e.target.value)}
+              onChange={(e) => setQuery(e.target.value)}
               placeholder="Enter a keyword"
               overrides={{
                 After: () => (
@@ -83,7 +84,7 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
                       style={{ cursor: "pointer" }}
                     />
                   </Block>
-                )
+                ),
               }}
             />
           </FormControl>
@@ -108,7 +109,8 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
             checked={isInactive}
             onChange={() => setIsInactive(!isInactive)}
           >
-            Inactive projects
+            Inactive projects (last commit more than 1 year ago and less than N
+            stars this year)
           </Checkbox>
         </Section>
 
@@ -121,8 +123,8 @@ const ProjectDashboard = ({ projects, tags: allTags }) => {
           <SortOrderPicker onChange={setSortOrder} value={sortOrder} />
           <ProjectList
             projects={sortedProjects}
-            onSelectProject={project => setSelectedProject(project)}
-            onSelectTag={id => setTags([getTagById(id)])}
+            onSelectProject={(project) => setSelectedProject(project)}
+            onSelectTag={(id) => setTags([getTagById(id)])}
           />
         </Section>
       </Column>
@@ -147,7 +149,7 @@ const EmptySpace = () => (
       alignItems: "center",
       justifyContent: "center",
       fontSize: "2rem",
-      color: "#ccc"
+      color: "#ccc",
     }}
   >
     Select a project
@@ -155,12 +157,12 @@ const EmptySpace = () => (
 );
 
 function findProjects(projects, { tags, hasIcon, isInactive, query }) {
-  const tagIds = tags.map(tag => tag.id);
+  const tagIds = tags.map((tag) => tag.id);
 
-  const filterByTag = project =>
-    tagIds.every(tagId => project.tags.includes(tagId));
+  const filterByTag = (project) =>
+    tagIds.every((tagId) => project.tags.includes(tagId));
 
-  const filteredProjects = projects.filter(project => {
+  const filteredProjects = projects.filter((project) => {
     if (tags.length > 0) {
       if (!filterByTag(project)) return false;
     }
